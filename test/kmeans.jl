@@ -204,4 +204,15 @@ end
     end
 end
 
+@testset "sorting" begin
+    Random.seed!(rng, 42)
+    data = cbrt.(rand(rng, 2, 300))
+    res = sort(kmeans(data, 5); by=last)
+    @test res.counts == [count(==(i), res.assignments) for i in 1:5]
+    for i in 1:5
+        @test mean(data[:, findall(==(i), res.assignments)]; dims=2) ≈ res.centers[:,i]
+    end
+    @test 1:5 == sortperm(eachcol(res.centers); by=last)
+end
+
 end
