@@ -125,11 +125,11 @@ function Base.sort(res::KmeansResult; kw...)
     perm = sortperm(eachcol(res.centers); kw...)
     iperm = invperm(perm)
     KmeansResult(
-        res.centers[:, iperm],
-        perm[res.assignments],
+        res.centers[:, perm],
+        iperm[res.assignments],
         copy(res.costs),  # this copy ensures no memory shared with original
-        res.counts[iperm],
-        res.wcounts[iperm],
+        res.counts[perm],
+        res.wcounts[perm],
         res.totalcost, res.iterations, res.converged)
 end
 
