@@ -116,6 +116,23 @@ function kmeans(X::AbstractMatrix{<:Real},                # in: data matrix (d x
             display=display, distance=distance, rng=rng)
 end
 
+"""
+    sort(res::KmeansResult; kw...)
+
+This applies permutation `p = sortperm(eachcol(res.centers); kw...)` to the `k` clusters.
+"""
+function Base.sort(res::KmeansResult; kw...)
+    perm = sortperm(eachcol(res.centers); kw...)
+    iperm = invperm(perm)
+    KmeansResult(
+        res.centers[:, iperm],
+        perm[res.assignments],
+        copy(res.costs),  # this copy ensures no memory shared with original
+        res.counts[iperm],
+        res.wcounts[iperm],
+        res.totalcost, res.iterations, res.converged)
+end
+
 #### Core implementation
 
 # core k-means skeleton
