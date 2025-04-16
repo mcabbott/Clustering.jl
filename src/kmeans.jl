@@ -133,6 +133,10 @@ function Base.sort(res::KmeansResult; kw...)
         res.totalcost, res.iterations, res.converged)
 end
 
+if VERSION < v"1.9"  # then Base.eachcol doesn't exist, or returns an iterator
+    eachcol(x::AbstractMatrix) = [view(x,:,i) for i in axes(x,2)]
+end
+
 #### Core implementation
 
 # core k-means skeleton

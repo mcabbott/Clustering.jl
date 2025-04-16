@@ -212,7 +212,7 @@ end
     for i in 1:5
         @test mean(data[:, findall(==(i), res.assignments)]; dims=2) ≈ res.centers[:,i]
     end
-    @test 1:5 == sortperm(eachcol(res.centers); by=last)
+    @test 1:5 == sortperm(Clustering.eachcol(res.centers); by=last)
 end
 
 end
